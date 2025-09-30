@@ -29,8 +29,8 @@ export default function Home() {
       <main className="container mx-auto px-4 py-8 ">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           <Suspense
-            fallback={Array.from({ length: 20 }).map((val, index) => (
-              <CountryCardSkeleton key={`${val}-skeleton`} />
+            fallback={Array.from({ length: 20 }).map((_, i) => (
+              <CountryCardSkeleton key={`country-skeleton-${i}`} />
             ))}
           >
             <CountryList />

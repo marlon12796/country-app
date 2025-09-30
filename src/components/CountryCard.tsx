@@ -9,12 +9,18 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/Card";
-import { Heart } from "lucide-react";
-import { Button } from "./ui/Button";
 import type { Country } from "@/types/country";
 import Image from "next/image";
-
+import { useFavoritesStore } from "@/lib/store/useFavorite";
+import { FavoriteButton } from "./FavoriteButton";
 export const CountryCard = ({ country }: { country: Country }) => {
+  const { toggleFavorite, isFavorite, favorites } = useFavoritesStore();
+  const favorite = isFavorite(country.cca3);
+  const handleToggleFavoriteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    toggleFavorite(country.cca3);
+  };
+
   return (
     <Card className="group cursor-pointer overflow-hidden border-border bg-card transition-all hover:border-muted-foreground/20 hover:shadow-lg">
       <CardContent className="p-0">
@@ -26,15 +32,11 @@ export const CountryCard = ({ country }: { country: Country }) => {
             height={500}
             className="h-full w-full object-cover transition-transform group-hover:scale-105"
           />
-          <Button
-            size="icon"
-            variant="secondary"
-            className={cn(
-              "absolute right-2 top-2 h-8 w-8 shadow-md transition-colors"
-            )}
-          >
-            <Heart className={cn("h-4 w-4")} />
-          </Button>
+
+          <FavoriteButton
+            onToggleFavoriteClick={handleToggleFavoriteClick}
+            favorite={favorite}
+          />
         </div>
         <div className="space-y-2 p-4">
           <h3 className="text-balance text-lg font-semibold leading-tight text-card-foreground">
