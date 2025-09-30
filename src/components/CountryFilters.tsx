@@ -10,7 +10,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/Select";
-import { useCountryFiltersStore } from "@/lib/store/useCountryFilterStore";
+import {
+  SortOptions,
+  useCountryFiltersStore,
+} from "@/lib/store/useCountryFilterStore";
 export const CountryFilters = () => {
   const {
     search,
@@ -74,12 +77,12 @@ export const CountryFilters = () => {
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="name-asc">Name (A-Z)</SelectItem>
-              <SelectItem value="name-desc">Name (Z-A)</SelectItem>
-              <SelectItem value="population-asc">
+              <SelectItem value={SortOptions.NameAsc}>Name (A-Z)</SelectItem>
+              <SelectItem value={SortOptions.NameDesc}>Name (Z-A)</SelectItem>
+              <SelectItem value={SortOptions.PopulationAsc}>
                 Population (Low to High)
               </SelectItem>
-              <SelectItem value="population-desc">
+              <SelectItem value={SortOptions.PopulationDesc}>
                 Population (High to Low)
               </SelectItem>
             </SelectContent>
@@ -101,11 +104,12 @@ export const CountryFilters = () => {
               placeholder="0"
               className="mt-1"
               value={minPopulation}
-              onInput={(e) =>
-                changeMinPopulation(
-                  Number.parseInt(e.currentTarget.value ?? "0")
-                )
-              }
+              min={0}
+              step={1000}
+              onInput={(e) => {
+                const value = e.currentTarget.value || "0";
+                changeMinPopulation(Number.parseInt(value));
+              }}
             />
           </div>
           <div>
@@ -117,10 +121,14 @@ export const CountryFilters = () => {
               type="number"
               placeholder="No limit"
               className="mt-1"
-              value={maxPopulation}
+              value={maxPopulation ?? ""}
+              min={0}
+              step={1000}
               onInput={(e) =>
                 changeMaxPopulation(
-                  Number.parseInt(e.currentTarget.value ?? "0")
+                  e.currentTarget.value
+                    ? parseInt(e.currentTarget.value)
+                    : undefined
                 )
               }
             />
