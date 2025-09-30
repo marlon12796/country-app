@@ -14,6 +14,9 @@ import {
   SortOptions,
   useCountryFiltersStore,
 } from "@/lib/store/useCountryFilterStore";
+import useDebounce from "@/hooks/useDebounce";
+import { useState } from "react";
+const TIME_DEBOUNCE = 300;
 export const CountryFilters = () => {
   const {
     search,
@@ -27,6 +30,14 @@ export const CountryFilters = () => {
     changeMinPopulation,
     changeMaxPopulation,
   } = useCountryFiltersStore();
+  const [localSearch, setLocalSearch] = useState(search);
+  useDebounce(
+    () => {
+      updateSearch(localSearch);
+    },
+    TIME_DEBOUNCE,
+    [localSearch]
+  );
 
   return (
     <div className="space-y-6 rounded-lg border border-border bg-card p-6">
@@ -40,8 +51,8 @@ export const CountryFilters = () => {
           <Input
             id="search"
             type="text"
-            value={search}
-            onInput={(e) => updateSearch(e.currentTarget.value)}
+            value={localSearch}
+            onInput={(e) => setLocalSearch(e.currentTarget.value)}
             placeholder="Search by name..."
             className="pl-9"
           />

@@ -31,10 +31,10 @@ export function CountryModal({ country, children }: CountryModalProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="max-w-2xl bg-card text-card-foreground">
+      <DialogContent className="max-w-2xl rounded-none bg-card text-card-foreground h-full sm:rounded-2xl sm:h-fit overflow-y-auto">
         <DialogHeader>
           <div className="flex items-start justify-between">
-            <DialogTitle className="text-balance pr-8 text-2xl font-bold text-foreground">
+            <DialogTitle className="text-balance  text-center text-2xl font-bold text-foreground">
               {country.name.official}
             </DialogTitle>
           </div>
