@@ -1,7 +1,7 @@
-import { FavoritesList } from "@/components/FavoritesList";
-import { Button } from "@/components/ui/Button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { FavoritesList } from "@/components/FavoritesList";
+import { Button } from "@/components/ui/Button";
 
 const FavoritesPage = () => {
   return (

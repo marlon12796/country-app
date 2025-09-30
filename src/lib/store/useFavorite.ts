@@ -31,6 +31,6 @@ export const useFavoritesStore = create<FavoriteStore>()(
         console.log(state);
         state?.setHasHydrated(true);
       },
-    }
-  )
+    },
+  ),
 );

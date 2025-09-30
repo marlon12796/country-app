@@ -1,19 +1,18 @@
 "use client";
+import { Heart } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import { getCountriesByCodes } from "@/lib/api/countries";
 import { useFavoritesStore } from "@/lib/store/useFavorite";
 import type { Country } from "@/types/country";
-import { Heart } from "lucide-react";
-import { useEffect, useState } from "react";
-import { Button } from "./ui/Button";
 import { CountryCard } from "./CountryCard";
-import Link from "next/link";
 import { CountryCardSkeleton } from "./CountryCardSkeleton";
+import { Button } from "./ui/Button";
 
 export const FavoritesList = () => {
   const { favorites, hasHydrated } = useFavoritesStore();
   const [countries, setCountries] = useState<Country[] | null>(null); // null = no cargado
   const [isLoading, setIsLoading] = useState(true);
-
   // biome-ignore lint/correctness/useExhaustiveDependencies: array hace loading infinito mejor primitivo
   useEffect(() => {
     if (!hasHydrated) return;
@@ -23,20 +22,33 @@ export const FavoritesList = () => {
       return;
     }
 
+    const controller = new AbortController();
     const fetchFavorites = async () => {
       try {
         setIsLoading(true);
-        const data = await getCountriesByCodes(favorites);
+        const data = await getCountriesByCodes(favorites, {
+          signal: controller.signal, // 👈 pasar el signal al fetch
+        });
         setCountries(data);
       } catch (error) {
+        if ((error as Error).name === "AbortError") {
+          console.log("Fetch aborted");
+          return;
+        }
         console.error("Error fetching countries:", error);
         setCountries([]);
       } finally {
         setIsLoading(false);
       }
     };
+
     fetchFavorites();
-  }, [favorites.join(",")]);
+
+    // cleanup
+    return () => {
+      controller.abort();
+    };
+  }, [favorites.join(","), hasHydrated]);
 
   if (!hasHydrated || isLoading || countries === null) {
     return (

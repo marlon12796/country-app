@@ -120,13 +120,13 @@ export function CountryModal({ country, children }: CountryModalProps) {
                 "gap-2",
                 favorite
                   ? "bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                  : "bg-primary text-primary-foreground hover:bg-primary/90"
+                  : "bg-primary text-primary-foreground hover:bg-primary/90",
               )}
             >
               <Heart
                 className={cn(
                   "size-4 text-stone-50",
-                  favorite && "fill-current"
+                  favorite && "fill-current",
                 )}
               />
               <span className=" text-white">

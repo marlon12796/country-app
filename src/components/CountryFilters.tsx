@@ -1,8 +1,14 @@
 "use client";
+import { Filter, Search, SlidersHorizontal } from "lucide-react";
+import { useState } from "react";
+import useDebounce from "@/hooks/useDebounce";
 import { REGIONS } from "@/lib/constants";
+import {
+  SortOptions,
+  useCountryFiltersStore,
+} from "@/lib/store/useCountryFilterStore";
 import { Input } from "./ui/Input";
 import { Label } from "./ui/Label";
-import { Search } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -10,12 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/Select";
-import {
-  SortOptions,
-  useCountryFiltersStore,
-} from "@/lib/store/useCountryFilterStore";
-import useDebounce from "@/hooks/useDebounce";
-import { useState } from "react";
+
 const TIME_DEBOUNCE = 300;
 export const CountryFilters = () => {
   const {
@@ -40,13 +41,21 @@ export const CountryFilters = () => {
   );
 
   return (
-    <div className="space-y-6 rounded-lg border border-border bg-card p-6">
-      <div>
-        {" "}
-        <Label htmlFor="search" className="text-sm font-medium text-foreground">
+    <div className="space-y-6 rounded-xl border border-border/50 bg-card/50 p-4 backdrop-blur-sm sm:p-6 lg:p-8">
+      <div className="flex items-center gap-2 border-b border-border/50 pb-4">
+        <SlidersHorizontal className="size-5 text-primary" />
+        <h2 className="text-lg font-semibold text-foreground">Filters</h2>
+      </div>
+
+      <div className="space-y-2">
+        <Label
+          htmlFor="search"
+          className="flex items-center gap-2 text-sm font-medium text-foreground"
+        >
+          <Search className="h-4 w-4 text-muted-foreground" />
           Search Countries
         </Label>
-        <div className="relative mt-2">
+        <div className="relative">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             id="search"
@@ -54,20 +63,25 @@ export const CountryFilters = () => {
             value={localSearch}
             onInput={(e) => setLocalSearch(e.currentTarget.value)}
             placeholder="Search by name..."
-            className="pl-9"
+            className="h-11 pl-10 transition-all focus:ring-2 focus:ring-primary/20"
           />
         </div>
       </div>
-      <div className="grid gap-6 sm:grid-cols-2">
-        <div>
+      <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
+        <div className="space-y-2">
           <Label
             htmlFor="region"
-            className="text-sm font-medium text-foreground"
+            className="flex items-center gap-2 text-sm font-medium text-foreground"
           >
+            <Filter className="h-4 w-4 text-muted-foreground" />
             Region
           </Label>
           <Select value={region} onValueChange={updateRegion}>
-            <SelectTrigger id="region" className="mt-2">
+            <SelectTrigger
+              id="region"
+              className="h-11 transition-all focus:ring-2 focus:ring-primary/20"
+            >
+              {" "}
               <SelectValue placeholder="Select region" />
             </SelectTrigger>
             <SelectContent>
@@ -79,12 +93,15 @@ export const CountryFilters = () => {
             </SelectContent>
           </Select>
         </div>
-        <div>
+        <div className="space-y-2">
           <Label htmlFor="sort" className="text-sm font-medium text-foreground">
             Sort By
           </Label>
           <Select value={sort} onValueChange={updateSort}>
-            <SelectTrigger id="sort" className="mt-2">
+            <SelectTrigger
+              id="sort"
+              className="h-11 transition-all focus:ring-2 focus:ring-primary/20"
+            >
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
@@ -100,30 +117,33 @@ export const CountryFilters = () => {
           </Select>
         </div>
       </div>
-      <div>
+      <div className="space-y-3 rounded-lg border border-border/30 bg-muted/20 p-4">
         <Label className="text-sm font-medium text-foreground">
           Population Range
         </Label>
-        <div className="mt-2 grid gap-4 sm:grid-cols-2">
-          <div>
-            <Label htmlFor="min-pop" className="text-xs text-muted-foreground">
-              Minimum
+        <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
+          <div className="space-y-2">
+            <Label
+              htmlFor="min-pop"
+              className="text-xs font-medium text-muted-foreground"
+            >
+              Minimum Population
             </Label>
             <Input
               id="min-pop"
               type="number"
               placeholder="0"
-              className="mt-1"
+              className="h-10 transition-all focus:ring-2 focus:ring-primary/20"
               value={minPopulation}
               min={0}
               step={1000}
               onInput={(e) => {
                 const value = e.currentTarget.value || "0";
-                changeMinPopulation(Number.parseInt(value));
+                changeMinPopulation(Number.parseInt(value, 10));
               }}
             />
           </div>
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="max-pop" className="text-xs text-muted-foreground">
               Maximum
             </Label>
@@ -131,14 +151,14 @@ export const CountryFilters = () => {
               id="max-pop"
               type="number"
               placeholder="No limit"
-              className="mt-1"
+              className="h-10 transition-all focus:ring-2 focus:ring-primary/20"
               value={maxPopulation ?? ""}
               min={0}
               step={1000}
               onInput={(e) =>
                 changeMaxPopulation(
                   e.currentTarget.value
-                    ? parseInt(e.currentTarget.value)
+                    ? parseInt(e.currentTarget.value, 10)
                     : undefined
                 )
               }

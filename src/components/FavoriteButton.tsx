@@ -25,7 +25,7 @@ export const FavoriteButton = ({
         "absolute right-2 cursor-pointer top-2 h-8 w-8 shadow-md transition-colors",
         mounted &&
           favorite &&
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90"
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
       )}
       onClick={onToggleFavoriteClick}
     >
