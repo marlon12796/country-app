@@ -6,4 +6,5 @@ export const REGIONS = [
   "Europe",
   "Oceania",
   "All",
-];
+] as const;
+export type RegionTypes = (typeof REGIONS)[number];

@@ -1,3 +1,4 @@
+"use client";
 import { REGIONS } from "@/lib/constants";
 import { Input } from "./ui/Input";
 import { Label } from "./ui/Label";
@@ -9,8 +10,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/Select";
-
+import { useCountryFiltersStore } from "@/lib/store/useCountryFilterStore";
 export const CountryFilters = () => {
+  const {
+    search,
+    region,
+    sort,
+    minPopulation,
+    maxPopulation,
+    updateSearch,
+    updateRegion,
+    updateSort,
+    changeMinPopulation,
+    changeMaxPopulation,
+  } = useCountryFiltersStore();
+
   return (
     <div className="space-y-6 rounded-lg border border-border bg-card p-6">
       <div>
@@ -23,6 +37,8 @@ export const CountryFilters = () => {
           <Input
             id="search"
             type="text"
+            value={search}
+            onInput={(e) => updateSearch(e.currentTarget.value)}
             placeholder="Search by name..."
             className="pl-9"
           />
@@ -36,7 +52,7 @@ export const CountryFilters = () => {
           >
             Region
           </Label>
-          <Select>
+          <Select value={region} onValueChange={updateRegion}>
             <SelectTrigger id="region" className="mt-2">
               <SelectValue placeholder="Select region" />
             </SelectTrigger>
@@ -53,7 +69,7 @@ export const CountryFilters = () => {
           <Label htmlFor="sort" className="text-sm font-medium text-foreground">
             Sort By
           </Label>
-          <Select>
+          <Select value={sort} onValueChange={updateSort}>
             <SelectTrigger id="sort" className="mt-2">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
@@ -84,6 +100,12 @@ export const CountryFilters = () => {
               type="number"
               placeholder="0"
               className="mt-1"
+              value={minPopulation}
+              onInput={(e) =>
+                changeMinPopulation(
+                  Number.parseInt(e.currentTarget.value ?? "0")
+                )
+              }
             />
           </div>
           <div>
@@ -95,6 +117,12 @@ export const CountryFilters = () => {
               type="number"
               placeholder="No limit"
               className="mt-1"
+              value={maxPopulation}
+              onInput={(e) =>
+                changeMaxPopulation(
+                  Number.parseInt(e.currentTarget.value ?? "0")
+                )
+              }
             />
           </div>
         </div>
