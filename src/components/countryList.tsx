@@ -1,8 +1,8 @@
-import { getCountries } from "@/lib/api/countries";
+"use client";
 import { CountryCard } from "./CountryCard";
+import type { Country } from "@/types/country";
 
-export const CountryList = async () => {
-  const countries = await getCountries();
+export const CountryList = ({ countries }: { countries: Country[] }) => {
   return (
     <>
       {countries.map((country) => (

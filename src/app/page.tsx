@@ -1,11 +1,14 @@
 import { CountryCardSkeleton } from "@/components/CountryCardSkeleton";
+import { CountryFilters } from "@/components/CountryFilters";
 import { CountryList } from "@/components/countryList";
 import { Button } from "@/components/ui/Button";
+import { getCountries } from "@/lib/api/countries";
 import { Heart } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 
-export default function Home() {
+export default async function Home() {
+  const countries = await getCountries();
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border bg-card">
@@ -27,13 +30,16 @@ export default function Home() {
         </div>
       </header>
       <main className="container mx-auto px-4 py-8 ">
+        <div className="mb-8">
+          <CountryFilters />
+        </div>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           <Suspense
             fallback={Array.from({ length: 20 }).map((_, i) => (
               <CountryCardSkeleton key={`country-skeleton-${i}`} />
             ))}
           >
-            <CountryList />
+            <CountryList countries={countries} />
           </Suspense>
         </div>
       </main>
