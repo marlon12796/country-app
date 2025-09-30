@@ -1,34 +1,36 @@
+// useFavorite.ts
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-interface FavoritesStore {
+
+type FavoriteStore = {
   favorites: string[];
-  toggleFavorite: (countryCode: string) => void;
-  isFavorite: (countryCode: string) => boolean;
-  removeFavorite: (countryCode: string) => void;
-  addFavorite: (countryCode: string) => void;
-}
-export const useFavoritesStore = create<FavoritesStore>()(
+  toggleFavorite: (code: string) => void;
+  isFavorite: (code: string) => boolean;
+  hasHydrated: boolean; // <-- indicador de hidratación
+  setHasHydrated: (state: boolean) => void;
+};
+
+export const useFavoritesStore = create<FavoriteStore>()(
   persist(
     (set, get) => ({
       favorites: [],
-      isFavorite: (countryCode: string) => {
-        return get().favorites.includes(countryCode);
-      },
-      removeFavorite: (countryCode: string) =>
+      toggleFavorite: (code) =>
         set((state) => ({
-          favorites: state.favorites.filter((code) => code !== countryCode),
+          favorites: state.favorites.includes(code)
+            ? state.favorites.filter((c) => c !== code)
+            : [...state.favorites, code],
         })),
-      addFavorite: (countryCode: string) =>
-        set((state) => ({
-          favorites: [...state.favorites, countryCode],
-        })),
-      toggleFavorite: (countryCode: string) => {
-        const { favorites, removeFavorite, addFavorite } = get();
-        favorites.includes(countryCode)
-          ? removeFavorite(countryCode)
-          : addFavorite(countryCode);
-      },
+      isFavorite: (code) => get().favorites.includes(code),
+      hasHydrated: false,
+      setHasHydrated: (state) => set({ hasHydrated: state }),
     }),
-    { name: "countries-favorites" }
+    {
+      name: "favorites",
+      // Callback que se llama cuando se hidrata el store desde localStorage
+      onRehydrateStorage: () => (state) => {
+        console.log(state);
+        state?.setHasHydrated(true);
+      },
+    }
   )
 );

@@ -19,3 +19,21 @@ export const getCountries = async (): Promise<Country[]> => {
 
   return response.json();
 };
+/**
+ * Obtiene varios países por sus códigos (cca3)
+ * @param codes Array de códigos cca3, ejemplo: ["USA","PER","BRA"]
+ */
+export const getCountriesByCodes = async (
+  codes: string[]
+): Promise<Country[]> => {
+  if (codes.length === 0) return [];
+  const countriesCodes = codes.join(",");
+  const response = await fetch(
+    `${API_URL}/alpha?codes=${countriesCodes}&fields=name,flags,population,region,capital,cca3`
+  );
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.message || "Failed to fetch countries by codes");
+  }
+  return data;
+};

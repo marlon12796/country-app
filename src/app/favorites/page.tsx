@@ -1,3 +1,4 @@
+import { FavoritesList } from "@/components/FavoritesList";
 import { Button } from "@/components/ui/Button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -25,7 +26,9 @@ const FavoritesPage = () => {
           </div>
         </div>
       </header>
-      <main className="container mx-auto px-4 py-8"></main>
+      <main className="container mx-auto px-4 py-8">
+        <FavoritesList />
+      </main>
     </div>
   );
 };
