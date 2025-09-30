@@ -58,7 +58,12 @@ export const FavoritesList = () => {
         </div>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-6">
           {Array.from({ length: 4 }).map((_, i) => (
-            <CountryCardSkeleton key={`country-skeleton-${i}`} />
+            <CountryCardSkeleton
+              key={`country-skeleton-${
+                // biome-ignore lint/suspicious/noArrayIndexKey: id es para skeleton
+                i
+              }`}
+            />
           ))}
         </div>
       </>

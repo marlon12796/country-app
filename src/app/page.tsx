@@ -1,12 +1,17 @@
+import { Heart } from "lucide-react";
+import Link from "next/link";
+import type { Metadata } from "next/types";
+import { Suspense } from "react";
 import { CountryCardSkeleton } from "@/components/CountryCardSkeleton";
 import { CountryFilters } from "@/components/CountryFilters";
 import { CountryList } from "@/components/countryList";
 import { Button } from "@/components/ui/Button";
 import { getCountries } from "@/lib/api/countries";
-import { Heart } from "lucide-react";
-import Link from "next/link";
-import { Suspense } from "react";
-
+export const metadata: Metadata = {
+  title: "Countries Explorer | Home",
+  description:
+    "Discover and explore countries around the world with filters and favorites.",
+};
 export default async function Home() {
   const countries = await getCountries();
   return (
@@ -36,7 +41,12 @@ export default async function Home() {
 
         <Suspense
           fallback={Array.from({ length: 20 }).map((_, i) => (
-            <CountryCardSkeleton key={`country-skeleton-${i}`} />
+            <CountryCardSkeleton
+              key={`country-skeleton-${
+                // biome-ignore lint/suspicious/noArrayIndexKey: id es para skeleton
+                i
+              }`}
+            />
           ))}
         >
           <CountryList countries={countries} />

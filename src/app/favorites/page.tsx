@@ -1,8 +1,13 @@
 import { ArrowLeft } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { FavoritesList } from "@/components/FavoritesList";
 import { Button } from "@/components/ui/Button";
-
+export const metadata: Metadata = {
+  title: "Countries Explorer | Favorites",
+  description:
+    "Your saved collection of favorite countries in Countries Explorer.",
+};
 const FavoritesPage = () => {
   return (
     <div className="min-h-screen bg-background">
