@@ -1,13 +1,9 @@
 import type { Country } from "@/types/country";
 import { API_URL } from "../constants";
 
-function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
+
 
 export const getCountries = async (): Promise<Country[]> => {
-  // ⏳ Simula espera de 5 segundos
-  await sleep(1000);
 
   const response = await fetch(
     `${API_URL}/all?fields=name,flags,population,region,capital,cca3`
